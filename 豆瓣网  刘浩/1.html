@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>豆瓣网</title>
+	<meta name='viewport' content='width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0' />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<link rel="stylesheet" href="1.css">
+	<link rel="stylesheet" href="font_895363_m8utbt8ary/iconfont.css">
+</head>
+<script src='vue.v2.5.17.js'></script>
+<body style='font-size:16px'>
+	 <div id='box'>
+		 <div class='text' :class="{show:index===x1}">
+			 <div class='input'>
+				 <i class='iconfont icon-fangdajing fl'></i>
+				 <input type="text" class='fl fn_12' placeholder='书名、作者、ISBN' @keypress.13='text1' v-model='shuru.input1'>
+				 <button class='fn_12' @click='text1'>搜索</button>
+			 </div>
+			 <div class='box_text fn_12' v-for='item,i in msg.tushu.books'>
+				<a :href="msg.tushu.books[i].alt">
+						<img :src="msg.tushu.books[i].images.small" alt="" class='fl'>
+						<p class='fl'>名称: {{msg.tushu.books[i].title}}</p>
+						<div class='fl'>
+							<div class='fl' v-for='iten,x in msg.tushu.books[i].tags' v-if='x<3'>{{msg.tushu.books[i].tags[x].name}}</div>
+						</div>
+						<p class='fl'>作者: {{msg.tushu.books[i].author[0]}}</p>
+						<p class='fl'>评分: {{msg.tushu.books[i].rating.average}}</p>
+						<p class='fl'>时间: {{msg.tushu.books[i].pubdate}}</p>
+				</a>
+			</div>
+			</div>
+			<div class='text' :class='{show:index===x2}'>
+				<div class='input'>
+					<i class='iconfont icon-fangdajing fl'></i>
+					<input type="text" class='fl fn_12' placeholder='电影、影人、影院、电视剧' @keypress.13='text2' v-model='shuru.input2'>
+					<button class='fn_12' @click='text2'>搜索</button>
+				</div>
+				<div class='box_text fn_12' v-for='item,i in msg.dianying.subjects'>
+					<a :href="msg.dianying.subjects[i].alt">
+						<img :src="msg.dianying.subjects[i].images.small" alt="" class='fl'>
+						<h2 class='fl'>{{msg.dianying.subjects[i].title}} - {{msg.dianying.subjects[i].year}}</h2>
+						<div class='fl'>
+							<div class='fl dianying' v-for='iten,x in msg.dianying.subjects[i].genres' v-if='x<3'>{{msg.dianying.subjects[i].genres[x]}}</div>
+						</div>
+						<p class='fl yp'>
+							<span v-for='item,x in msg.dianying.subjects[i].casts'>{{msg.dianying.subjects[i].casts[x].name}}</span>
+						</p>
+						<p class='fl'>评分: {{msg.dianying.subjects[i].rating.average}}</p>
+					</a>
+				</div>
+			</div>
+			<div class='text' :class='{show:index===x3}'>
+				<div class='input'>
+					<i class='iconfont icon-fangdajing fl'></i>
+					<input type="text" class='fl fn_12' placeholder='唱片名、表演者、条码、ISRC' @keypress.13='text3' v-model='shuru.input3'>
+					<button class='fn_12' @click='text3'>搜索</button>
+				</div>
+				<div class='box_text fn_12' v-for='item,i in msg.yinyue.musics'>
+					<a :href="msg.yinyue.musics[i].alt">
+						<img :src="msg.yinyue.musics[i].image" alt="" class='fl'>
+						<p class='fl'>名称: {{msg.yinyue.musics[i].title}}</p>
+						<p class='fl'>作者: <span v-for='item,x in msg.yinyue.musics[i].author'>{{msg.yinyue.musics[i].author[x].name}}</span></p>
+						<p class='fl'>评分: {{msg.yinyue.musics[i].rating.average}}</p>
+					</a>
+				</div>
+			</div>
+			<div id='bottom_tab'>
+				<div v-for='item,i in bottom_text'
+				:class="{pitch:index===i}"
+				@click=bth($event,i)>
+					<i :class='bottom_text[i].class'></i>
+					<P>{{bottom_text[i].text}}</p>
+				</div>
+			</div>
+	</div>
+</body>
+<script>
+	var vm=new Vue({
+		el:'#box',
+		data:{
+			index:0,
+			x1: 0,
+			x2: 1,
+			x3: 2,
+			bottom_text:[
+				{
+					class:'iconfont icon-tushu',
+					text:'图书'
+				},
+				{
+					class: 'iconfont icon-dianying',
+					text: '电影'
+				},
+				{
+					class:'iconfont icon-yinle',
+					text:'音乐'
+				}
+			],
+			msg:{
+				tushu:'',
+				dianying:'',
+				yinyue:''
+			},
+			shuru:{
+				input1:'',
+				input2: '',
+				input3: ''
+			}
+		},
+		methods:{
+				bth($event,i){
+					console.log(i);
+					this.index=i;
+				},
+				text1(){
+					var oscript=document.createElement('script');
+					oscript.src='https://api.douban.com/v2/book/search?q='+this.shuru.input1+'&count=10&alt=xd&callback=fun1';
+					document.getElementsByTagName("head")[0].appendChild(oscript);
+					this.shuru.input1='';
+				},
+				text2() {
+					var oscript = document.createElement('script');
+					oscript.src = 'https://api.douban.com/v2/movie/search?q=' + this.shuru.input2 +'&count=10&alt=xd&callback=fun2';
+					document.getElementsByTagName("head")[0].appendChild(oscript);
+					this.shuru.input2 = '';
+				},
+				text3() {
+					var oscript = document.createElement('script');
+					oscript.src = 'https://api.douban.com/v2/music/search?q=' + this.shuru.input3 +'&count=10&alt=xd&callback=fun3';
+					document.getElementsByTagName("head")[0].appendChild(oscript);
+					this.shuru.input3 = '';
+				}
+			}
+		});
+		var html=document.documentElement;
+		var width=html.getBoundingClientRect().width;
+		html.style.fontSize=width / 3.2+'px';
+		function fun1(fun1){
+			vm.msg.tushu=fun1;
+		}
+		function fun2(fun2){
+			vm.msg.dianying=fun2;
+			console.log(vm.msg.dianying)
+		}  
+		function fun3(fun3) {
+			vm.msg.yinyue = fun3;
+		}  
+</script>
+</html>
