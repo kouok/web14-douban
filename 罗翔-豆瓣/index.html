@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0,maximum-scale=1.0, user-scalable=0" />
+	<!-- 禁止将数字转为号码 -->
+	<meta name="format-detection" content="telephone=no" />
+	<!-- 控制顶栏状态栏显示样式，可以为透明 -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<!-- 添加一个网站图标，这样当你将网站添加到桌面图标时，会显示出来 -->
+	<link rel="apple-touch-icon-precomposed" href="mobile_logo.png?v1" />
+	<title>口袋豆瓣</title>
+	<link rel="stylesheet" type="text/css" href="./css/reset.css">
+	<link rel="stylesheet" type="text/css" href="./css/index.css">
+	<script src="jquery-3.3.1.min.js"></script>
+	<script src="vue.js"></script>
+</head>
+<body>
+	<div id='caontainer' v-cloak>
+		<transition-group tag='div' class=fat>
+			<div v-for='keys,index in navList' v-show='index==active' :key='index'>
+				<!-- 顶部搜索栏 -->
+				<header class="searchBox">
+					<div class="search flex">
+						<input type="text" name="" class="head-search" :placeholder="keys.placeholder" v-model='msg'>
+						<button @click.prevent='search(index)'>搜索</button>
+						<i class="iconfont icon-fangdajing"></i>
+					</div>
+				</header>
+				<!-- 主体内容 -->
+				<section class="main">
+					<ul>
+						<template v-if='list[index].books'>
+							<li class="main-item" v-for='itemS in list[index].books'>
+								<a href="#" class="flex">
+									<div class="main-img">
+										<img :src="itemS.images.medium">
+									</div>
+									<div class="main-text">
+										<p class="cutFont title">名称: {{itemS.title}}</p>
+										<p><span class="sp1">{{itemS.binding}}</span></p>
+										<p class="cutFont">作者: {{itemS.translator[0]}}</p>
+										<p>评分: {{itemS.rating.average}}</p>
+										<p>时间: {{itemS.pubdate}}</p>
+									</div>
+								</a>
+							</li>
+						</template>
+						<template v-if='list[index].subjects'>
+							<li class="main-item" v-for='itemS in list[index].subjects'>
+								<a href="#" class="flex">
+									<div class="main-img">
+										<img :src="itemS.images.medium">
+									</div>
+									<div class="main-text">
+										<p class="cutFont title">{{itemS.title}}</p>
+										<p>
+											<span class="sp1 sp2" v-for='key in itemS.genres'>{{key}}</span>
+										</p>
+										<p class="cutFont">
+											<span class="sp3" v-for='names in itemS.casts'>{{names.name}}</span>
+										</p>
+										<p>评分: {{itemS.rating.average}}</p>
+									</div>
+								</a>
+							</li>
+						</template>
+						<template v-if='list[index].musics'>
+							<li class="main-item" v-for='itemS in list[index].musics'>
+								<a href="#" class="flex">
+									<div class="main-img">
+										<img :src="itemS.image">
+									</div>
+									<div class="main-text">
+										<p class="cutFont title">名称: {{itemS.title}}</p>
+										<p>作者: {{itemS.author[0].name}}</p>
+										<p>评分: {{itemS.rating.average}}</p>
+									</div>
+								</a>
+							</li>
+						</template>
+					</ul>
+				</section>
+			</div>
+		</transition-group>
+		<!-- 底部tab切换 -->
+		<section class='footerBox'>
+			<ul class="flex">
+				<li class="footer-item flex" v-for='item,i in navList' :class='{on:i==active}' @click='tab(i)'>
+					<i :class='item.icon'></i>
+					<span>{{item.navName}}</span>
+				</li>
+			</ul>
+		</section>
+		<div class="footer"></div>
+	</div>
+	<script>
+		(() => {
+			const html = document.documentElement;
+			const whtml = parseInt(html.getBoundingClientRect().width);
+			html.style.fontSize = whtml / 3.75 + 'px'
+		})()
+		var listAll = []
+		var request = function(url) {
+			return new Promise(function(resolve, reject) {
+				$.ajax({
+					url: url,
+					type: 'get',
+					dataType: 'jsonp',
+					success: function(data) {
+						resolve(data);
+					},
+					fail: function(error) {
+						reject(error);
+					}
+				})
+			})
+		}
+		function $Vue() {
+			var vm = new Vue({
+				el: '#caontainer',
+				data: {
+					list: listAll,
+					navList: [
+						{
+							navName: '图书',
+							icon: 'iconfont icon-shu',
+							placeholder: '书名、 作者、 ISBN'
+						},
+						{
+							navName: '电影',
+							icon: 'iconfont icon-dianying',
+							placeholder: '电影、 影人、 影院、 电视剧'
+						},
+						{
+							navName: '音乐',
+							icon: 'iconfont icon-yinle-',
+							placeholder: '唱片名、 表演者、 条码、 ISRC'
+						}
+					],
+					msg: ''	,
+					active: 0
+				},
+				methods: {
+					search(i) {
+						if (i == 0) {
+							request('https://api.douban.com/v2/book/search?q='+this.msg+'&count=10&alt=xd').then(shu => {
+								listAll.splice(i, 1, shu);
+								this.msg = '';
+							});
+						}else if (i == 1) {
+							request('https://api.douban.com/v2/movie/search?q='+this.msg+'&count=10&alt=xd').then(movie => {
+								listAll.splice(i, 1, movie);
+								this.msg = '';
+							});
+						}else {
+							request('https://api.douban.com/v2/music/search?q='+this.msg+'&count=10&alt=xd').then(movie => {
+								listAll.splice(i, 1, movie);
+								this.msg = '';
+							});
+						}
+					},
+					tab(i) {
+						this.active = i;
+					}
+				}
+			});
+		}
+		request('https://api.douban.com/v2/book/search?q=A&count=10&alt=xd')
+		.then(res => {
+			listAll.push(res);
+			return request('https://api.douban.com/v2/movie/search?q=%E6%AF%92%E6%B6%B2&count=5&alt=xd')
+		})
+		.then(movieData => {
+			// console.log(movieData)
+			listAll.push(movieData);
+			return request('https://api.douban.com/v2/music/search?q=%E9%99%88%E5%A5%95%E8%BF%85&count=10&alt=xd')
+		})
+		.then(musicData => {
+			listAll.push(musicData);
+			$Vue();
+		}).catch(err => console.warn(err))
+	</script>
+</body>
+</html>
