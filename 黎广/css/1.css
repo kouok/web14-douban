@@ -1,0 +1,196 @@
+@charset 'utf-8';
+html{
+	font-size: 100%;
+	height: 100%;
+}
+body{
+	background: #fff;
+	font-family: Helvetica,'微软雅黑',-apple-system,sans-serif;
+	line-height: 1.5;
+	/*禁止文字自动被浏览器缩放*/
+	text-size-adjust:100%!important;
+	overflow-x: hidden; 
+	padding: 0;
+	margin: 0;
+}
+
+ol,ul,li{
+	list-style:none;
+}
+a, div, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, canvas, caption, center, cite, code, dd, del, details, dfn, div, dl, dt, em, embed, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, i, iframe, img, ins, kbd, label, legend, li, mark, menu, nav, object, ol, output, p, pre, q, ruby, s, samp, section, small, span, strike, strong, sub, summary, sup, table, tbody, td, tfoot, th, thead, time, tr, tt, u, ul, var, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    font-size: 0.14rem;
+    vertical-align: baseline;
+    -webkit-tap-highlight-color:rgba(255,255,255,0);
+	-webkit-font-smoothing:antialiased;
+}
+b,i,u,s{
+	font-style:normal;
+	font-weight:normal;
+	text-decoration:none;
+}
+button,select,textarea{
+	font-family:Helvetica; 
+	border:none;outline:none; 
+    /*消除按钮默认的圆角外观*/
+    -webkit-apprearance:none;
+    -webkit-tap-highlight-color:transparent;
+}
+a{
+	text-decoration:none; 
+	outline:none;
+}
+.clearfix::after {
+	content: "";
+	display: block;
+	clear: both;
+}
+.fl {
+	float: left;
+}
+.fr {
+	float: right;
+}
+.bl {
+	display: block;
+}
+.in {
+	display: inline-block;
+}
+#box{
+	padding: 0.1rem;
+}
+.inp {
+	font-size: 0;
+	height: 0.55rem;
+	position: relative;
+	border: 1px solid #DCDCDC;
+	border-right:none;
+}
+.inp>input{
+	color:#828282;
+	box-sizing: border-box;
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	outline:none;
+	margin: 0;
+	border: none;
+	padding-right: 0.57rem;
+}
+.inp>button{
+	height: 100%;
+	width: 0.57rem;
+	background: #318DFF;
+	position: absolute;
+	right: 0;
+	top: 0;
+	color: #fff;
+	text-align: center;
+	line-height: 100%;
+}
+.dbBox{
+	margin-top: 0.25rem;
+	font-size: 0.18rem;
+}
+.bookInner{
+	height: 1.35rem;
+	width: 100%;
+	border: 1px solid #DCDCDC;
+	padding: 0.1rem;
+	box-sizing: border-box;
+	display: flex;
+	margin-bottom: 0.1rem;
+	overflow: hidden;
+}
+.aImg{
+	display: block;
+}
+.aImg img{
+	width: 0.8rem;
+	height: 1.15rem;
+	display: block;
+}
+.dbText{
+	margin-left: 0.1rem;
+}
+.dbText a{
+	color: #000;
+	display: block;
+}
+#tags1{
+	background: #F3B600;
+	font-size: 0.12rem;
+	color: #fff;
+	margin-right: 0.03rem;
+	padding: 0.02rem;
+}
+#tags2{
+	background: red;
+	font-size: 0.12rem;
+	color: #fff;
+	margin-right: 0.03rem;
+	padding: 0.02rem;
+}
+#tags3{
+	background: #F3B600;
+	font-size: 0.12rem;
+	color: #fff;
+	margin-right: 0.03rem;
+	padding: 0.02rem;
+}
+.null{
+	width: 100%;
+	height: 0.7rem;
+}
+.dbNav{
+	width: 100%;
+	height: 0.7rem;
+	position: fixed;
+	bottom: 0;
+	left:0;;
+	background: #F4F4F4;
+	display: flex;
+	align-items:center;
+	z-index: 100;
+}
+.nav{
+	width: 33.33%;
+	text-align: center;
+}
+.btColor{
+	color: #4F9EFD;
+}
+.movDirectors{
+	font-size: 0.1rem;
+	display: block;
+	width: 100%;
+	white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.movDirectors>a{
+	display: inline-block;
+	font-size: 0.1rem;
+	color: #9A9898;
+	margin-right: 0.02rem;
+}
+.movDirectors>a>span{
+	font-size: 0.1rem;
+}
+.movyan{
+	display: flex;
+	justify-content: space-around;
+}
+.movyan a{
+	display: block;
+	border-radius: 50%;
+	overflow: hidden;
+	width: 0.96rem;
+	height: 1.43rem;
+}
+.movyan img{
+	width: 100%;
+}

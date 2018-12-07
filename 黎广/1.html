@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8"/>
+    <!--viewport一定要加 user-scalable 值可以是yes|no或1|0 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0,maximum-scale=1.0, user-scalable=0" />
+    <!-- 禁止将数字转为号码 -->
+    <meta name="format-detection" content="telephone=no" />
+    <!-- 控制顶栏状态栏显示样式，可以为透明 -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <!-- 添加一个网站图标，这样当你将网站添加到桌面图标时，会显示出来 -->
+    <link rel="apple-touch-icon-precomposed" href="mobile_logo.png?v1" />
+    <title>搜索</title>
+    <link rel="stylesheet" href="css/1.css"/>
+	<link rel="stylesheet" href="css/font_905471_7ks3a0rqfgq/iconfont.css">
+	<script src="js/vue.js"></script>
+	<script src="https://cdn.staticfile.org/jquery/3.3.1/jquery.js"></script>
+	<script src="js/1.js"></script>
+</head>
+<body>
+    <div id="box">
+		<!-- 顶部搜索板块 -->
+		<div class="inp">
+			<input type="text" v-model=txt>
+			<button  @click='fun'>搜索</button>
+		</div>
+		<!-- 内容板块 -->
+		<div class="dbBox">
+			<!-- 图书板块 -->
+			<div class="bookInner" v-for='item in listbook.books' v-show="index==1" >
+				<a href="" class="aImg">
+					<img v-bind:src="item.images.small" alt="">
+				</a>
+				<div class="dbText">
+					<!-- 点击名称的时候吧这块的数据传入方法内 -->
+					<a href="inner.html" @click='bookInner(item)'>
+						<span>名称:&nbsp;</span>
+						{{item.title}}
+					</a>
+					<a href="">
+						<span v-for='i,j in item.tags' v-if="j<3" v-bind:class='tags+index'>{{i.name}}</span>
+					</a>
+					<a href="">
+						<span>作者:&nbsp;</span>
+						{{item.translator[0]}}
+					</a>
+					<a href="">
+						<span>评分:&nbsp;</span>{{item.rating.average}}
+					</a>
+					<a href="">
+						<span>时间:&nbsp;</span>{{item.pubdate}}
+					</a>
+				</div>
+			</div>
+			<!-- 电影板块 -->
+			<div class="bookInner" v-for='item in listmov.subjects' v-show="index==2">
+				<a href="" class="aImg"><img v-bind:src="item.images.small" alt=""></a>
+				<div class="dbText">
+					<a href="inner.html" @click='movInner(item)'>{{item.title}}</a>
+					<a href=""><span v-for='i in item.genres' v-bind:class='tags+index'>{{i}}</span></a>
+					<div class="movDirectors"><a href="" v-for='movN in item.casts'><span>{{movN.name}}</span></a></div>
+					<a href=""><span>评分:&nbsp;</span>{{item.rating.average}}</a>
+				</div>
+			</div>
+			<!-- 音乐板块 -->
+			<div class="bookInner" v-for='item in listmus.musics' v-show="index==3">
+				<a href="" class="aImg"><img v-bind:src="item.image" alt=""></a>
+				<div class="dbText">
+					<a href="inner.html" @click='musInner(item)'><span>名称:&nbsp;</span>{{item.title}}</a>
+					<a href=""><span>作者:&nbsp;</span>{{item.author[0].name}}</a>
+					<a href=""><span>评分:&nbsp;</span>{{item.rating.average}}</a>
+				</div>
+			</div>
+		</div>
+		<div class="null"></div>
+		<!-- 底部固定导航板块 -->
+		<div class="dbNav">
+			<div class="nav" v-bind:class="{btColor:index==1}" @click='navFun1'>
+				<i class="iconfont icon-tushu"></i>
+				<p>图书</p>
+			</div>
+			<div class="nav" v-bind:class="{btColor:index==2}" @click='navFun2'>
+				<i class="iconfont icon-dianying"></i>
+				<p>电影</p>
+			</div>
+			<div class="nav" v-bind:class="{btColor:index==3}" @click='navFun3'>
+				<i class="iconfont icon-yinlemusic170"></i>
+				<p>音乐</p>
+			</div>
+		</div>
+	</div>
+	<script>
+        (function(){
+
+            var html=document.documentElement;
+
+            var whtml=html.getBoundingClientRect().width;
+
+            html.style.fontSize=whtml/3.75+"px";
+
+        })();
+    </script>
+</body>
+</html>
