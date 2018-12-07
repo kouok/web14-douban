@@ -1,0 +1,40 @@
+项目说明
+
+本周我们来开发一个叫 口袋豆瓣 的应用。在豆瓣应用我们可以获取（或者搜索获取）到豆瓣的图书，电影，音乐列表以及相关的详情信息，具体效果图见图片。
+
+具体要求
+
+使用HTML5+CSS3+JSONP完成。当然你也可以尝试使用浏览器的vue版本来开发。
+
+本开发项目对于你们来说，这是一种新的开发方式。需要完成下面的功能：
+
+图1是动图，可以在浏览器中查看
+
+1、图书、音乐、电影列表页展示（见效果图1，2,3,4）
+2、底部 Tab 切换类别
+3、顶部搜索框功能（见效果图：05）
+4、点击 item 展示详情页（见效果图：06,07,08）
+5、返回列表页等功能。
+
+jsonp数据地址：
+
+1、图书地址：
+格式：
+https://api.douban.com/v2/book/search?q=书名&count=要展示的图书数量&alt=xd&callback=回调函数名
+比如：
+https://api.douban.com/v2/book/search?q=JavaScript&count=10&alt=xd&callback=fun
+
+2、音乐地址：
+格式：
+https://api.douban.com/v2/music/search?q=歌手或歌曲名&count=要显示的数量&alt=xd&callback=回调函数名
+比如：
+https://api.douban.com/v2/music/search?q=陈奕迅&count=10&alt=xd&callback=fun
+
+3、电影地址：
+格式：
+https://api.douban.com/v2/movie/search?q=电影&count=数量&alt=xd&callback=回调函数名
+比如：
+https://api.douban.com/v2/movie/search?q=毒液&count=5&alt=xd&callback=fun
+
+请在下周二前提交，提交到如下地址：
+https://github.com/kouok/web14-douban
