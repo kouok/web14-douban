@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale:1,maximum-scale:1,user-scalable=no"> 
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="css/1.css">
+	<link rel="stylesheet" href="css/font_947641_n50gdzg33zs/iconfont.css">
+	<script src=''></script>
+	<script src='js/vue.js'></script>
+	<script src="js/jquery3.3.1.js"></script>
+	<script>
+    	!(function(){
+    		var html=document.documentElement;
+    		var whtml=html.getBoundingClientRect().width;
+    		html.style.fontSize=whtml/32+'px';
+            console.log(whtml);
+    	})()
+</script>
+</head>
+<body>
+	<div id="box">
+		<div id="box1"  v-if='index==0'>
+			<div class="header">
+				<form action="" class="form flex align-content-center">
+					<input type="text" :placeholder='model[index]' class="shuru" class="input" v-model='url'>
+					<input type="button" value="搜索" class="shousuo color-white" id="btn" @click='add(url)'>
+					<span class="text-mge iconfont">&#xe629;</span>
+				</form>
+			</div>
+			<ul class="ul">
+				<li v-for='val,index in books'>
+					<img  :src='val.image' alt="">
+					<div class="text">
+						<a href="val.alt" class="">
+							<p>名称：{{val.title}}</p>
+							<p><span class="span">{{val.binding}}</span></p>
+							<p>作者：{{val.author[0]}}</p>
+							<p>评分：{{val.rating.average}}</p>
+							<p>时间	：{{val.pubdate}}</p>
+						</a>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div id="box1"  v-if='index==1'>
+			<div class="header">
+				<form action="" class="form flex align-content-center">
+					<input type="text" :placeholder='model[index]' class="shuru" class="input" v-model='url'>
+					<input type="button" value="搜索" class="shousuo color-white" id="btn" @click='add(url)'>
+					<span class="text-mge iconfont">&#xe629;</span>
+				</form>
+			</div>
+			<ul class="ul">
+				<li v-for='val,index in subjects'>
+					<img  :src='val.images.large' alt="">
+					<div class="text">
+						<a href="val.alt" class="">
+							<p><h3>{{val.title}}</h3></p>
+							<p><span class="span" v-for='item in val.genres'>{{item}}</span></p>
+							<p><span v-for='i in val.directors'>{{i.name}}</span></p>
+							<p>{{val.rating.average}}</p>
+							<p>{{val.year}}</p>
+						</a>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div id="box1"  v-if='index==2'>
+			<div class="header">
+				<form action="" class="form flex align-content-center">
+					<input type="text" :placeholder='model[index]' class="shuru" class="input" v-model='url'>
+					<input type="button" value="搜索" class="shousuo color-white" id="btn" @click='add(url)'>
+					<span class="text-mge iconfont">&#xe629;</span>
+				</form>
+			</div>
+			<ul class="ul">
+				<li v-for='val,index in musics'>
+					<img  :src='val.image' alt="">
+					<div class="text">
+						<a href="val.alt" class="">
+							<p><h3>名称：{{val.title}}</h3></p>
+							<p v-for='i in val.author'>作者：{{i.name}}</p>
+							<p>评分：{{val.rating.average}}</p>
+						
+						</a>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div id="bottom">
+				<ul class="btom flex justify-content-between">
+					<li class="">
+						<a href="javascript:;" @click='tab(0)' :class="{'bg-col':index===0}">
+							<i class="iconfont">&#xe613;</i>
+							<p>图书</p>
+						</a>
+					</li>
+					
+					<li>
+						<a href="javascript:;" @click='tab(1)' :class="{'bg-col':index===1}">
+							<i class="iconfont">&#xe600;</i>
+							<p>电影</p>
+						</a>
+					</li>
+					<li>
+						<a href="javascript:;" @click='tab(2)' :class="{'bg-col':index===2}">
+							<i class="iconfont">&#xe601;</i>
+							<p>音乐</p>
+						</a>
+					</li>
+				</ul>
+		</div>
+	</div>
+	<script>
+		var ipt=document.getElementsByClassName("input");
+		var vm=new Vue({
+			el:'#box',
+			data:{
+				index:0,
+				isShow:false,
+				books:[],
+				subjects:[],
+				musics:[],
+				url:'',
+				model:['书名、作者、ISBN','电影、电影人、影院、电视剧','唱片名、表演者、条码、ISRC']
+			},
+			methods:{
+				add(value){
+					this.url=value;
+					console.log(this.url)
+					var src=[`https://api.douban.com/v2/book/search?q=${this.url}&count=10&alt=xd&callback=`,`https://api.douban.com/v2/movie/search?q=${this.url}&count=10&alt=xd&callback=`,`https://api.douban.com/v2/music/search?q=${this.url}&count=10&alt=xd&callback=`];
+					$.ajax({
+					    url:src[vm.index],
+					    dataType:"jsonp",
+					    jsonpcallback:"fun", 
+					    success:function(data){
+					       console.log(data.musics);
+
+					      vm.books=data.books;
+					      vm.subjects=data.subjects;
+					      vm.musics=data.musics;
+
+					    }
+					}),
+					this.value='';
+					console.log(src[vm.index])
+					console.log(this.index)
+					
+				},
+				tab(a){
+					this.index=a;
+					this.url=''
+					console.log()
+				}
+			}
+		})
+		$.ajax({
+		    url:"https://api.douban.com/v2/book/search?q=java&count=10&alt=xd&callback=",
+		    dataType:"jsonp",
+		    jsonpcallback:"fun", 
+		    success:function(data){
+		       
+		       vm.books=data.books;
+		          		
+		    }
+		})
+		$.ajax({
+		    url:"https://api.douban.com/v2/movie/search?q=我是谁&count=10&alt=xd&callback=",
+		    dataType:"jsonp",
+		    jsonpcallback:"fun", 
+		    success:function(data){
+		       
+		       vm.subjects=data.subjects;
+		          		
+		    }
+		})
+		$.ajax({
+		    url:"https://api.douban.com/v2/music/search?q=十年&count=10&alt=xd&callback=",
+		    dataType:"jsonp",
+		    jsonpcallback:"fun", 
+		    success:function(data){
+		       
+		       vm.musics=data.musics;
+		          		
+		    }
+		})
+
+
+		 
+	</script>
+</body>
+</html>
